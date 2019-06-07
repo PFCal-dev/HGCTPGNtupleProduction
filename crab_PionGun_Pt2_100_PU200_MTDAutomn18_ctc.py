@@ -11,7 +11,7 @@ config.General.workArea = 'jobs'
 
 config.section_("JobType")
 config.JobType.pluginName = 'Analysis'
-config.JobType.psetName = 'produce_ntuple_multialgos_reduced_genmatch_v9_cfg.py'
+config.JobType.psetName = 'produce_ntuple_ctc_reduced_genmatch_v9_cfg.py'
 config.JobType.maxMemoryMB = 2500
 
 config.section_("Data")
