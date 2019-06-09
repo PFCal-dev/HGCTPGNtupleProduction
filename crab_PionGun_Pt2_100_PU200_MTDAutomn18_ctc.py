@@ -20,6 +20,7 @@ config.Data.inputDBS = 'global'
 config.Data.splitting = 'FileBased'
 config.Data.unitsPerJob = 5
 config.Data.outLFNDirBase = local.outLFNDirBase
+config.Data.publication = False
 config.Data.outputDatasetTag = config.General.requestName
 
 config.section_("Site")

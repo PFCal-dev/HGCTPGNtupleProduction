@@ -90,7 +90,7 @@ chains.register_backend1("Dummy",
 ## BE2
 chains.register_backend2("Histomaxshape0",
         lambda p,i : clustering3d.create_histoMax_variableDr(p,i,
-    seed_threshold=0., shape_threshold=0.))
+    shape_threshold=0.))
 ### Varies seed threshold
 chains.register_backend2("Histomaxth0shape0",
         lambda p,i : clustering3d.create_histoMax_variableDr(p,i,
