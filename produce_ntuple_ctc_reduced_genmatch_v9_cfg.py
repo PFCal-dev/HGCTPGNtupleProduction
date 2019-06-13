@@ -67,6 +67,8 @@ import L1Trigger.L1THGCalUtilities.clustering3d as clustering3d
 import L1Trigger.L1THGCalUtilities.selectors as selectors
 import L1Trigger.L1THGCalUtilities.customNtuples as ntuple
 
+# Change seed position to energy weigted barycenter
+process.histoMax_C3d_params.seed_position = cms.string('TCWeighted')
 
 chains = HGCalTriggerChains()
 # Register algorithms
@@ -90,13 +92,24 @@ chains.register_backend1("Dummy",
 ## BE2
 chains.register_backend2("Histomax",
         clustering3d.create_histoMax_variableDr)
+chains.register_backend2("Histomaxshape15",
+        lambda p,i : clustering3d.create_histoMax_variableDr(p,i,
+    shape_threshold=1.5))
 ### Varies seed threshold
 chains.register_backend2("Histomaxth0",
         lambda p,i : clustering3d.create_histoMax_variableDr(p,i,
     seed_threshold=0.))
+chains.register_backend2("Histomaxth0shape15",
+        lambda p,i : clustering3d.create_histoMax_variableDr(p,i,
+    seed_threshold=0.,
+    shape_threshold=1.5))
 chains.register_backend2("Histomaxth20",
         lambda p,i : clustering3d.create_histoMax_variableDr(p,i,
     seed_threshold=20.))
+chains.register_backend2("Histomaxth20shape15",
+        lambda p,i : clustering3d.create_histoMax_variableDr(p,i,
+    seed_threshold=20.,
+    shape_threshold=1.5))
 ### Varies clustering distance
 from L1Trigger.L1THGCal.customClustering import dr_layerbylayer
 dr_layerbylayer_50 = [dr*0.5 for dr in dr_layerbylayer]
@@ -104,9 +117,17 @@ dr_layerbylayer_200 = [dr*2. for dr in dr_layerbylayer]
 chains.register_backend2("Histomaxdr50",
         lambda p,i : clustering3d.create_histoMax_variableDr(p,i,
     distances=dr_layerbylayer_50))
+chains.register_backend2("Histomaxdr50shape15",
+        lambda p,i : clustering3d.create_histoMax_variableDr(p,i,
+    distances=dr_layerbylayer_50,
+    shape_threshold=1.5))
 chains.register_backend2("Histomaxdr200",
         lambda p,i : clustering3d.create_histoMax_variableDr(p,i,
     distances=dr_layerbylayer_200))
+chains.register_backend2("Histomaxdr200shape15",
+        lambda p,i : clustering3d.create_histoMax_variableDr(p,i,
+    distances=dr_layerbylayer_200,
+    shape_threshold=1.5))
 # Register selector
 chains.register_selector("Genmatch",
         selectors.create_genmatch)
@@ -121,7 +142,12 @@ backend_algos = ['Histomax', 'Histomaxth0', 'Histomaxth20', 'Histomaxdr50', 'His
 ## Make cross product fo ECON and BE algos
 import itertools
 for cc,be in itertools.product(concentrator_algos,backend_algos):
-    chains.register_chain('Floatingpoint8', cc, 'Dummy', be, 'Genmatch', 'Genclustersntuple')
+    if 'Supertriggercell' in cc:
+        # Use a shape threshold of 1.5 mipT for STC
+        chains.register_chain('Floatingpoint8', cc, 'Dummy', be+'shape15', 'Genmatch', 'Genclustersntuple')
+    else:
+        chains.register_chain('Floatingpoint8', cc, 'Dummy', be, 'Genmatch', 'Genclustersntuple')
+
 
 process = chains.create_sequences(process)
 
