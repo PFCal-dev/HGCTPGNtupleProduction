@@ -67,6 +67,8 @@ import L1Trigger.L1THGCalUtilities.clustering3d as clustering3d
 import L1Trigger.L1THGCalUtilities.selectors as selectors
 import L1Trigger.L1THGCalUtilities.customNtuples as ntuple
 
+# Change seed position to energy weigted barycenter
+process.histoMax_C3d_params.seed_position = cms.string('TCWeighted')
 
 chains = HGCalTriggerChains()
 # Register algorithms
