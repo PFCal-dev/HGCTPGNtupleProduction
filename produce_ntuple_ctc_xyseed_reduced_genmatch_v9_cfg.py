@@ -90,8 +90,6 @@ chains.register_concentrator("Onebit",
 chains.register_backend1("Dummy",
         clustering2d.create_dummy)
 ## BE2
-chains.register_backend2("Histomax",
-        clustering3d.create_histoMax_variableDr)
 chains.register_backend2("Histomaxbin4",
         lambda p,i : clustering3d.create_histoMaxXY_variableDr(p,i,
         nBins_X1=96,
